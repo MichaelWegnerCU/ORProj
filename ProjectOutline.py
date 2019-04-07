@@ -103,7 +103,13 @@ STANDARD GUIDELINES:
                 
         If multiple people contribute to writing the same function/class, 
         use multiple author lines.
-    
+        
+    CODE REVIEW: 
+        USE THE PROJECT SECTION ON GITHUB. WHEN YOU'VE FINISHED WRITING A FILE, PLACE THAT FILE IN THE
+        TESTING SECTION ALONG WITH UNIT TESTS FOR IT. ONE OTHER PERSON (ANYBODY CAN DO THIS) SHOULD THEN PERFORM THE 
+        UNIT TESTS ON THEIR MACHINE, VERIFY THAT THE OUTPUT IS CONSISTENT WITH THE SPECIFICATIONS, AND ADD THE FILE
+        TO THE READY TO COMMIT SECTION. WHEN WE HAVE FINISHED A PARTCULAR CHUNK OF THE PROJECT, WE'LL PUSH THE FILES
+        TO THE MAIN BRANCH.
 '''
 
 '''
@@ -170,13 +176,18 @@ TO-DO LIST FOR WEEK OF 4/8/19:
                 IS JUST A WORK-AROUND UNTIL I CAN GET GOOD SIMULATIONS
                 TO FIND A MORE ACCURATE ESTIMATOR OF THE VARIANCE.
                 
+    DATA SELECTION:
+        WHO'S WORKING ON THIS: ZANE JAKOBS, YOUR NAME HERE IF YOU WANT TO WORK ON THIS
+    
+ 
                 
     LINEAR OPTIMIZATION:
-        WHO'S WORKING ON THIS: YOUR NAME HERE
+        WHO'S WORKING ON THIS: YOUR NAME HERE (SETUP SECTION), ZANE JAKOBS (SOLVER SECTION)
         
         NOTE THAT IF YOU SEE A BETTER WAY TO DO THE LINEAR OPTIMIZATION PART,
         FEEL FREE TO REPLACE THIS MODEL SPECIFICATION WITH YOUR OWN
         
+        SETUP SECTION:
         Define the following variables:
             V0 is total portfolio initial value. V0*leverage is the upper bound
             on what we can spend.
@@ -205,17 +216,20 @@ TO-DO LIST FOR WEEK OF 4/8/19:
             of dollars in short positions, divided by V0.
             This will form a constraint.
             
-            The simplest optimization we can do is then
+            The simplest optimization we can do--note that this completely ignores portfolio level risk--is then
             
-                Max w^T * (r[i]/sd[i]) over values of w
+                Max w^T * (r[i]/sd[i]) over values of w (NOTE: WE CAN USE JUST r[i] IF YOU WANT, AND WE SHOULD DO BOTH)
                 s.t.
                 
                 1^T * w <= dollar_exposure
                 1^T * w >=  -dollar_exposure
                 sum of | w[i] | over i = leverage
                 
-                
-                
+     
+    SOLVER SECTION:
+    (I'll do this--Zane)
+    Choose an existing linear solver or roll your own (almost certainly, an existing one will be fine). Verify that the input is 
+    in the correct form to optimize, optimize it, and display the results
             
             
             
