@@ -26,8 +26,7 @@ Column names are, in order of ticker, date, return, 'symbol', 'date','adjusted'
 @jit
 def n_day_returns(price_series, n):
     
-    if not isinstance(price_series, pd.DataFrame):
-        raise Exception('price_series must by a Pandas dataframe, but it is of type',type(price_series))
+    assert isinstance(price_series, pd.DataFrame)
         
     rows = price_series.shape[0]
     
@@ -54,7 +53,7 @@ NOTE: THIS IGNORES SLIPPAGE, TRANSACTION COSTS (INCLUDING BROKERAGE FEES),
 DROPOUT BIAS (FIRMS GOING BANKRUPT/DROPPING OFF EXCHANGE), AND MANY OTHER 
 IMPRTANT CONSIDERATIONS. DO NOT USE THIS ON A REAL PORTFOLIO.
 '''
-    
+@jit
 def portfolio_return(weights, rets):
     wRows = weights.shape[0]
     wCols = weights.shape[1]
@@ -86,6 +85,7 @@ NOTE: THIS IGNORES SLIPPAGE, TRANSACTION COSTS (INCLUDING BROKERAGE FEES),
 DROPOUT BIAS (FIRMS GOING BANKRUPT/DROPPING OFF EXCHANGE), AND MANY OTHER 
 IMPRTANT CONSIDERATIONS. DO NOT USE THIS ON A REAL PORTFOLIO.
 '''
+@jit
 def daily_portfolio_variance(weights, daily_data):
     #sort
     weights = weights.sort_values(b=['symbol'])
@@ -106,7 +106,42 @@ def daily_portfolio_variance(weights, daily_data):
     #var[ sum over i of a_iX_i] = sum over i of ( a_i^2 * var(X_i))
     return np.asscalar(np.matmul(np.transpose(squareW), daily_var))
 
+'''
+Author: Zane Jakobs
 
+Notes: not using JIT compilation, since it won't be able to deduce the 
+return type; if it turns out that all by options return the same type, then
+the return type should be specified if possible. However, I suspect that
+since the return dataframes contain both strings and floating point types,
+numba won't have that as a settable type
 
+Param returns: Pandas DataFrame of expected returns. Each column label
+must be the equity's ticker, and the value in that column is the 
+expected value. NOTE THAT THIS IS THE OPPOSITE CONVENTION OF THE ONE 
+USED IN DAILY_PORTFOLIO_VARIANCE, AND IS NECESSARY FOR THE 
+GUROBI SOLVER
 
+Param nlong: pick the nlong equities w/ largest forecast returns
+
+Param nshort: pick the nshort equities w/ largest negative (smallest) forecast
+returns.
+
+Param by: criterion for selecting equities:
+    "Return" goes on expected returns only. 
+    POSSIBLY TO BE ADDED IN THE FUTURE: selection based on Sharpe, Sortino
+    ratios.
+
+Return: equities we should look to trade, which 
+'''
+def select_equities(returns, nlong = 200, nshort = 200, by="Return"):
+    if by == "Return":
+        #sort by row, which contains the forecasted returns
+        sortedRets = returns.sort_values(by = 1, ascending = False, axis=1)
+        #pick longs and shorts
+        longs = sortedRets.loc[0:nlong]
+        shorts = sortedRets.loc[-nshort:]
+        #join along columns
+        tradeableEquities = pd.concat([longs,shorts], axis=1)
+        return tradeableEquities
+    
 
