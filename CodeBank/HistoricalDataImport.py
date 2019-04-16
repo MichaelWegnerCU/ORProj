@@ -1,12 +1,13 @@
-
-# @author: Michael Wegnerr
-# @brief: Returns historical price data for each stock ticker
-# @return: Dictionary with keys being Ticker and value being a dataframe of cleaned historical data
-
+"""
+Created on Saturday Apr 13 10:13:02 2019
+@author: Michael Wegnerr
+@brief: Returns historical price data for each stock ticker
+@return: Dictionary with keys being Ticker and value being a dataframe of cleaned historical data
+"""
 import pandas as pd 
 import numpy as np 
 
-def get_Tickers_prices():
+def get_Ticker_prices():
 	Price_2016_df = pd.read_csv("../Data/Historical/prices_2016.csv")
 	##Removing the company "WY" which only appears in the 2016 data set
 	Price_2016_df = Price_2016_df[Price_2016_df.symbol != "WY"]
@@ -31,5 +32,5 @@ def get_Tickers_prices():
 	return(dict(list(All_Tickers.items())[0:2]))
 
 #For testing remove comment out when necesary
-print(get_Tickers_prices())
+print(get_Ticker_prices())
 

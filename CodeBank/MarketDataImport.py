@@ -1,7 +1,9 @@
-# @author: Michael Wegnerr
-# @brief: Returns historical market data for every market day in 2016,17,18
-# @return: Dictonary of market data with [date,open,high,low,close,volume,adjusted]
-
+"""
+Created on Tue Apr 16 09:13:02 2019
+@author: Michael Wegnerr
+@brief: Returns historical market data for every market day in 2016,17,18
+@return: Dictonary of market data with [date,open,high,low,close,volume,adjusted]
+"""
 import pandas as pd 
 import numpy as np 
 
