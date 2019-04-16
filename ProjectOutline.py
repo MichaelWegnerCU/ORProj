@@ -213,9 +213,7 @@ TO-DO LIST FOR WEEK OF 4/8/19:
             way as r is for the returns. The ratio r[i]/sd[i] is the security's
             Sharpe ratio over the period
             
-            p0 is the vector of initial prices of each security
-            
-            max_dollar_exposure is the maximum market beta we will use, defined as the 
+            dollar_exposure is the maximum market beta we will use, defined as the 
             total number of dollars in long positions minus the total number
             of dollars in short positions, divided by V0.
             This will form a constraint.
