@@ -27,6 +27,9 @@ def get_Tickers_prices():
 	All_Tickers={}
 	for t in known_tickers:
 	    All_Tickers[t]=pd.concat([ticker_2016[t], ticker_2017[t],ticker_2018[t]], ignore_index=True, sort=False)
-	    
+	#This function will return a dictionary with the key being the ticker and the value being the dataframe of historical data    
 	return(dict(list(All_Tickers.items())[0:2]))
+
+#For testing remove comment out when necesary
+print(get_Tickers_prices())
 
