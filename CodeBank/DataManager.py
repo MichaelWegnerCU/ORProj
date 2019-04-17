@@ -37,7 +37,6 @@ def get_Ticker_prices():
 
 
 
-#For testing remove comment out when necesary
 # print(get_Ticker_prices())
 
 """
@@ -66,7 +65,10 @@ def get_Forecast(op_tick=None):
 
 	
 #For testing remove comment out when necesary
-# print(get_Forecast("UAA"))
+ticker_in="AAPL"
+adam_q=get_Forecast(ticker_in)
+data=adam_q[ticker_in]
+print(data["Lo.95"])
 
 
 """
