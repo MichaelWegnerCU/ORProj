@@ -20,7 +20,7 @@ Each column label must be the security's ticker, and the value in that
 Param expCov: expected covariance matrix as a numpy array
 
 Param riskTol: risk tolerance factor. Input -1 to choose Kelly-optimal 
-risk tolerances
+risk tolerances; NOT IMPLEMENTED YET
 
 Param max_pos_size: maximum fraction of the portfolio to allocate to any
 given position
@@ -48,15 +48,15 @@ abs val of weights sum to within leverage interval
 
 individual weights are within the position size interval
 '''
-def make_gurobi_QP(expReturns, expCov, max_pos_size, riskTol,
+def markowitz_optimize(expReturns, expCov, max_pos_size, riskTol,
                    min_dollar_exposure, max_dollar_exposure,
                    leverage_lb = 0.95, leverage_ub = 1.0, name = 'Markowitz'):
     
     mod = grb.Model(name)
     
     tickers = expReturns.columns
-    
-    rets = expReturns.iloc[0]
+    #second row contains expected return
+    rets = expReturns.iloc[1]
     
     #one decision var per ticker with the given max size
     weights = pd.Series(mod.addVars(tickers, lb = -max_pos_size,
