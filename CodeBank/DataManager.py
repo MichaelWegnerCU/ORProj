@@ -3,6 +3,8 @@ import re
 import pandas as pd 
 import numpy as np 
 
+from QuantUtils import n_day_returns
+
 """
 Created on Saturday Apr 13 10:13:02 2019
 @author: Michael Wegnerr
@@ -27,12 +29,13 @@ def get_Ticker_prices():
 	    ticker_2016[t] = Price_2016_df.loc[Price_2016_df['symbol'] == t]
 	    ticker_2017[t] = Price_2017_df.loc[Price_2017_df['symbol'] == t]
 	    ticker_2018[t] = Price_2018_df.loc[Price_2018_df['symbol'] == t]
+
 	    
 	All_Tickers={}
 	for t in known_tickers:
 	    All_Tickers[t]=pd.concat([ticker_2016[t], ticker_2017[t],ticker_2018[t]], ignore_index=True, sort=False)
 	#This function will return a dictionary with the key being the ticker and the value being the dataframe of historical data    
-	return(dict(list(All_Tickers.items())[0:2]))
+	return(dict(list(All_Tickers.items())),known_tickers)
 
 
 
@@ -54,6 +57,7 @@ def get_Forecast(op_tick=None):
 	for directory, subdirectories, files in os.walk(root_dir):
 		for file in files:
 			comp_name=re.search("(?<=forecast_)(.*?)(?=\.)", file)
+			print(comp_name)
 			file_name="../Data/Forecasts/"+file
 			Current_pd = pd.read_csv(file_name)
 			Current_pd = Current_pd.loc[:, ~Current_pd.columns.str.contains('^Unnamed')]
@@ -65,10 +69,6 @@ def get_Forecast(op_tick=None):
 
 	
 #For testing remove comment out when necesary
-ticker_in="AAPL"
-adam_q=get_Forecast(ticker_in)
-data=adam_q[ticker_in]
-print(data["Lo.95"])
 
 
 """
@@ -90,3 +90,16 @@ def get_Market_data():
 
 # ##Comment out when not testing
 # print(get_Market_data().head())
+
+
+#N day variable for the n_Day_returns
+n_day=10
+def obtain_returns():
+	sym_dict,uniq_sym=get_Ticker_prices()
+	for sym in uniq_sym:
+		df_test=sym_dict[sym]
+	    n_day_returns(df_test[['symbol', 'date', 'adjusted']],n_day)
+
+obtain_returns()
+
+
