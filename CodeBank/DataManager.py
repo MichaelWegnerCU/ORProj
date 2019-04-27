@@ -67,10 +67,6 @@ def get_Forecast(op_tick=None):
 	else:
 		return({op_tick:Forecasts[op_tick]})
 
-	
-#For testing remove comment out when necesary
-
-
 """
 Created on Tue Apr 16 09:13:02 2019
 @author: Michael Wegnerr
@@ -98,8 +94,37 @@ def obtain_returns():
 	sym_dict,uniq_sym=get_Ticker_prices()
 	for sym in uniq_sym:
 		df_test=sym_dict[sym]
-	    n_day_returns(df_test[['symbol', 'date', 'adjusted']],n_day)
+		returns=n_day_returns(df_test[['symbol', 'date', 'adjusted']],n_day)
+	return(returns)
+#obtain_returns()
 
-obtain_returns()
+
+def get_params_time(t):
+	root_dir = '../Data/Historical'
+	GASParams={}
+
+	for directory, subdirectories, files in os.walk(root_dir):
+		for file in files:
+			try:
+				comp_name=re.search("(?<=GASParams_)(.*?)(?=\.)", file)
+
+				if (comp_name!= None):
+					comp_name=comp_name.group(0)
+					file_name="../Data/Historical/"+file
+					Current_pd = pd.read_csv(file_name)
+					Current_pd = Current_pd.loc[:, ~Current_pd.columns.str.contains('^Unnamed')]
+					GASParams[comp_name]=Current_pd.iloc[t]
+			except:
+				print("error")
+	return GASParams
+
+
+print(get_params_time(1))
+
+
+
+
+
+
 
 
