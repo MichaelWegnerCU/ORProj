@@ -9,6 +9,79 @@ import pandas as pd
 import numpy as np
 from numba import jit
 
+
+'''
+Author: Zane Jakobs
+
+Param rets: numpy array of returns
+
+Param mu: mean of Gaussian noise to add
+
+Param sd: standard deviation of Gaussian noise to add
+
+ASSUMPTION NOTE: WE'RE ADDING GAUSSIAN NOISE, SO WE'LL BE DISTORTING
+THE RETURNS DISTRIBUTION BY MAKING IT MORE GAUSSIAN (SINCE THE NORMAL
+IS A STABLE DISTRIBUTION). 
+'''
+def noisify_returns(rets, mu, sd):
+    noise = np.random.normal(mu, sd, rets.shape)
+    noisyRets = rets + noise
+    return noisyRets
+
+'''
+Author: Zane Jakobs
+
+Param key: key in dictionary; MUST BE DICTIONARY OUTPUT 
+FROM CALL TO markowitz_optimize() 
+
+Return: ticker corresponding to that key
+'''
+def key_to_ticker(key):
+    return key[(key.find("[") + 1):key.find("]")]
+
+#applies above to whole dict
+def all_key_to_ticker(dct):
+    newDct = {}
+    for key in dct.keys():
+        knew = key_to_ticker(key)
+        newDct[knew] = dct[key]
+    return newDct
+
+
+'''
+Author: Zane Jakobs
+
+Param dct: result of call to markowitz_optimize(... ,out="Dict",...) 
+
+Param ret: Pandas dataframe of returns in the same format
+as the expReturns parameter of markowitz_optimize(...)
+
+Return: numpy array of portfolio weights aligned with
+correct spot relative to returns vector and covariance matrix
+'''
+def dict_to_weight(dct, ret):
+    #ordered tickers
+    tkr = ret.columns
+    #return values to turn into output
+    r = ret.values
+    #get longs and shorts
+    longs = all_key_to_ticker(dct['long'])
+    shorts = all_key_to_ticker(dct['short'])
+    #loop through tickers and emplace weights
+    vecId = 0
+    for t in tkr:
+        if t in longs:
+            r[0,vecId] = longs[t]
+            vecId += 1
+        elif t in shorts:
+            r[0,vecId] = shorts[t]
+            vecId += 1
+        else:
+            r[0,vecId] = 0
+            vecId += 1
+    return r
+    
+
 '''
 Author: Zane Jakobs
 

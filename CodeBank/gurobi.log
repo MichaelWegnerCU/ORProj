@@ -1,0 +1,47 @@
+Optimize a model with 3 rows, 910 columns and 2730 nonzeros
+Model has 414505 quadratic objective terms
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [5e-05, 3e-02]
+  QObjective range [3e-08, 3e-03]
+  Bounds range     [5e-02, 5e-02]
+  RHS range        [3e-01, 1e+00]
+Presolve removed 1 rows and 0 columns
+Presolve time: 0.07s
+Presolved: 2 rows, 911 columns, 1821 nonzeros
+Presolved model has 414505 quadratic objective terms
+Ordering time: 0.00s
+
+Barrier statistics:
+ Free vars  : 200
+ AA' NZ     : 2.030e+04
+ Factor NZ  : 2.050e+04 (roughly 1 MByte of memory)
+ Factor Ops : 2.768e+06 (less than 1 second per iteration)
+ Threads    : 4
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0  -6.00290466e+03 -4.61000000e+04  9.11e+05 1.13e-13  1.00e+06     0s
+   1  -1.25346799e+01 -4.60003866e+04  1.90e+03 7.38e-13  2.11e+03     0s
+   2  -1.31554447e-01 -4.47778881e+04  2.00e+01 1.80e-12  4.60e+01     0s
+   3  -9.86157923e-02 -3.77614258e+04  1.50e+01 1.35e-12  3.51e+01     0s
+   4   3.09670639e-08 -1.79685732e+04  1.50e-05 9.03e-13  9.86e+00     0s
+   5   5.48377527e-08 -1.82040669e+01  1.96e-10 5.66e-13  9.99e-03     0s
+   6  -6.36152173e-05 -2.40199519e-01  2.36e-12 7.10e-15  1.32e-04     0s
+   7  -4.54064926e-03 -6.02765558e-02  3.55e-15 1.39e-17  3.06e-05     0s
+   8  -6.59526434e-03 -3.31706600e-02  2.49e-14 2.67e-17  1.46e-05     0s
+   9  -9.58272646e-03 -2.77390159e-02  2.50e-16 1.70e-17  9.96e-06     0s
+  10  -1.07344334e-02 -2.32352844e-02  7.11e-15 1.13e-17  6.86e-06     0s
+  11  -1.27236430e-02 -2.07032976e-02  1.78e-14 8.67e-18  4.38e-06     0s
+  12  -1.35906594e-02 -1.95200289e-02  3.55e-15 6.94e-18  3.25e-06     0s
+  13  -1.42510772e-02 -1.83936218e-02  1.42e-14 6.94e-18  2.27e-06     0s
+  14  -1.49945638e-02 -1.77831638e-02  1.42e-14 6.94e-18  1.53e-06     0s
+  15  -1.54916426e-02 -1.70547340e-02  1.78e-14 6.94e-18  8.57e-07     0s
+  16  -1.60235631e-02 -1.64799404e-02  9.71e-17 8.67e-18  2.50e-07     0s
+  17  -1.62322970e-02 -1.62613780e-02  2.49e-14 1.04e-17  1.60e-08     0s
+  18  -1.62467945e-02 -1.62468241e-02  7.11e-15 7.37e-18  1.62e-11     0s
+  19  -1.62468093e-02 -1.62468093e-02  1.07e-14 8.67e-18  1.62e-14     0s
+
+Barrier solved model in 19 iterations and 0.30 seconds
+Optimal objective -1.62468093e-02
+

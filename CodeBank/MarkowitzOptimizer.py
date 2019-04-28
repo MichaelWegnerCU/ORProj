@@ -64,6 +64,8 @@ Param name: name of the model
 Param out: "Print" or "Write" for print to terminal or write to file.
 "Dict" for dictionary to return
 
+Param modLog: print model output log to console? default false
+
 Return: Markowitz-optimal portfolio--that is, the w that solve the QP
 
 min w^T * expCov * w - riskTol * w^T * r
@@ -79,7 +81,8 @@ individual weights are within the position size interval
 def markowitz_optimize(expReturns, expCov, max_pos_size, riskTol,
                    min_dollar_exposure, max_dollar_exposure,
                    leverage_lb = 0.95, leverage_ub = 1.0, 
-                   name = 'Markowitz', out="Print"):
+                   name = 'Markowitz', out="Print",
+                   modLog=False):
     
     mod = grb.Model(name)
     
@@ -116,12 +119,12 @@ def markowitz_optimize(expReturns, expCov, max_pos_size, riskTol,
     mod.addConstr(posWeights.sum() + negWeights.sum() >= min_dollar_exposure)
     mod.update()
     #leverage constraints
-    #max of sum of squares achieved when half negative max, 
-    #half positive max, which is nSec * max_pos_size^2
     mod.addConstr(posWeights.sum() - negWeights.sum() <= leverage_ub)# * max_pos_size)
     mod.update()
-    #set output flag to 0?  we'll see based on the output
-    #mod.setParam('OutputFlag', 0)
+    #set output flag to 0?
+    if not modLog:
+        mod.setParam('OutputFlag', 0)
+        mod.update()
     #optimize
     mod.optimize()
     totLev = 0
