@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Apr 28 08:08:03 2019
+
+@author: zanejakobs
+"""
+
+import AstVar as var
+import pandas as pd
+import numpy as np
+import DataManager as dm
+
+corr = pd.read_csv("/Users/zanejakobs/Desktop/FIN_ORProj/ORProj/Data/Spearman20002200.csv")
+corr = corr.select_dtypes(include=np.number)
+
+timeId = 2100
+sd, tkr = var.make_stdevs(timeId)
+cov = var.make_covariance(timeId, corr)
+
+rets = dm.obtain_returns(1)
+print(rets)

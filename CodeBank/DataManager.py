@@ -33,7 +33,7 @@ def get_Ticker_prices():
 	    
 	All_Tickers={}
 	for t in known_tickers:
-	    All_Tickers[t]=pd.concat([ticker_2016[t], ticker_2017[t],ticker_2018[t]], ignore_index=True, sort=False)
+	    All_Tickers[t]=pd.concat([ticker_2016[t], ticker_2017[t],ticker_2018[t]], ignore_index=True)#, sort=False)
 	#This function will return a dictionary with the key being the ticker and the value being the dataframe of historical data    
 	return(dict(list(All_Tickers.items())),known_tickers)
 
@@ -89,8 +89,8 @@ def get_Market_data():
 
 
 #N day variable for the n_Day_returns
-n_day=10
-def obtain_returns():
+#n_day=10
+def obtain_returns(n_day):
 	sym_dict,uniq_sym=get_Ticker_prices()
 	for sym in uniq_sym:
 		df_test=sym_dict[sym]
@@ -118,8 +118,9 @@ def get_params_time(t):
 				print("error")
 	return GASParams
 
-
-print(get_params_time(1))
+#converts output of get_params_time to dict
+#def
+#print(get_params_time(1))
 
 
 
