@@ -8,7 +8,6 @@ Created on Tue Apr 16 09:13:02 2019
 
 import gurobipy as grb
 import pandas as pd
-import numpy as np
 
 
 '''
