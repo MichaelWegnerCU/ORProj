@@ -8,7 +8,9 @@ Created on Mon Apr 15 08:53:47 2019
 import pandas as pd
 import numpy as np
 from numba import jit
-
+import MarkowitzOptimizer as mo
+from math import sqrt
+import AstVar as var
 
 '''
 Author: Zane Jakobs
@@ -217,4 +219,69 @@ def select_equities(returns, nlong = 200, nshort = 200, by="Return"):
         tradeableEquities = pd.concat([longs,shorts], axis=1)
         return tradeableEquities
     
+def markowitz_one_day_test(ERets, realRets, covMat,  max_position_size,
+                           risk_tolerance, min_dollar_exposure,
+                           max_dollar_exposure):
+    testRes = mo.markowitz_optimize(ERets, covMat, max_position_size,
+                                    risk_tolerance, min_dollar_exposure,
+                                    max_dollar_exposure, out="Dict")
+    Ws = dict_to_weight(testRes, ERets)
+    realizedRet = Ws.dot(realRets)
+    realizedSD =  sqrt(np.linalg.multi_dot([Ws ,covMat, np.transpose(Ws)]) )
+    return realizedRet, realizedSD
+    
+    
+
+def get_BigReturnsMat():
+    return pd.read_csv("../Data/Historical/BigReturnsMat.csv")
+
+
+
+
+'''
+Author: Zane Jakobs
+
+Brief: run backtest for Markowitz optimizer over one covariance matrix
+
+Return: array of daily returns in order
+'''
+def markowitz_backtest(corrMat, startId, endId, maxPos, riskTol, 
+                       minDol, maxDol, noiseMu=0.0, noiseSdFact=0.0):
+    testLen = endId - startId
+    assert testLen > 0
+    
+    rets = get_BigReturnsMat()
+    rets = rets.iloc[:, 1:]#rets.drop(columns=['Unnamed: 0'])
+    
+    dataHolder = np.zeros((testLen,2))
+    for day in range(testLen):
+        sd, tkr = var.make_stdevs(startId + day)
+        cov = var.make_covariance(startId + day, corrMat, printErr=False)
+        retsId = rets.iloc[startId + day,:]
+        if noiseSdFact > 0:
+            realSd = np.std(retsId)
+            noisyRet = noisify_returns(retsId, noiseMu, noiseSdFact*realSd)
+        else:
+            noisyRet = retsId
+        
+        noisyRet = pd.DataFrame(noisyRet).transpose()
+        ret, risk = markowitz_one_day_test(noisyRet, retsId, cov,
+                                           maxPos, riskTol, minDol,
+                                           maxDol)
+        dataHolder[day,0] = ret
+        dataHolder[day,1] = risk
+    return dataHolder
+
+
+
+
+
+
+
+
+
+
+
+
+
 

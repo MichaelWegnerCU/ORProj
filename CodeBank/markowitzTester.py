@@ -12,6 +12,7 @@ import numpy as np
 import DataManager as dm
 import MarkowitzOptimizer as mo
 import QuantUtils as utl
+from math import sqrt
 
 corr = pd.read_csv("/Users/zanejakobs/Desktop/FIN_ORProj/ORProj/Data/Spearman20002200.csv")
 corr = corr.select_dtypes(include=np.number)
@@ -26,7 +27,7 @@ retsId = rets.iloc[timeId,:]
 
 #test noisify_returns
 realSd = np.std(retsId)
-noisyRet = utl.noisify_returns(retsId, 0.0, 0.5*realSd)
+noisyRet = utl.noisify_returns(retsId, 0.0, 1.5*realSd)
 print("pre-noise mean:", np.mean(retsId))
 print("noisy mean:", np.mean(noisyRet))
 
@@ -48,7 +49,7 @@ solDict = mo.markowitz_optimize(NERet, cov,
                       min_dollar_exposure,
                       max_dollar_exposure,
                       out="Dict")
-
+'''
 print(solDict['long'])
 print(solDict['short'])
 print("Leverage:")
@@ -57,9 +58,37 @@ print("Dollar exposure:")
 print(solDict['DollarExposure'])
 print("Longs after re-keying:")
 print(utl.all_key_to_ticker(solDict['long']))
-
+'''
 Ws = utl.dict_to_weight(solDict, ERet)
-print("Result of dict_to_weight:")
-print(Ws)
-print("Realized return:")
-print(1+Ws.dot(retsId))
+#print("Result of dict_to_weight:")
+#print(Ws)
+print("Realized one-day return:")
+rret = 100 * Ws.dot(retsId)
+print(rret, "percent.")
+print("Realized standard deviation:")
+rsd = 100 * sqrt(np.linalg.multi_dot([Ws ,cov, np.transpose(Ws)]) )
+print(rsd, "percent.")
+print("Realized Sharpe:")
+print(rret/rsd)
+
+
+
+print("Backtest from Dec. 12, 2017 to Dec. 27, 2017:")
+
+testMat = utl.markowitz_backtest(corr, 2000, 2010, max_position_size,
+                                 risk_tolerance, min_dollar_exposure,
+                                 max_dollar_exposure, noiseMu=0,
+                                 noiseSdFact=2)
+print(testMat)
+np.savetxt("../Data/Test/121217-127617.csv", testMat)
+
+
+
+
+
+
+
+
+
+
+
