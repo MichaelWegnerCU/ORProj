@@ -91,7 +91,7 @@ sp1018 (starting Jan 5 2018, ending Dec. 28 2018)
 @param corrMat: Pandas DataFrame containing correlation matrix of stocks
 '''
 
-def make_covariance(index, corrMat):
+def make_covariance(index, corrMat, printErr=True):
     #get stdevs and list of tickers in order
     S, tkr = make_stdevs(index)
     #verify that order is correct, change otherwise
@@ -111,7 +111,8 @@ def make_covariance(index, corrMat):
                 tkr[swapID] = tempT
                 S[swapID] = tempS
             except:
-                print("Error: corrMat does not contain ticker ", tkr[i], ".\n")
+                if printErr:
+                    print("Error: corrMat does not contain ticker ", tkr[i], ".\n")
                 #delete extra column and row
                 #np.delete(corrMat, i, 0)
                 #np.delete(corrMat, i, 1)
