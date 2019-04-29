@@ -3,7 +3,7 @@ import re
 import pandas as pd 
 import numpy as np 
 
-from QuantUtils import n_day_returns
+#from QuantUtils import n_day_returns
 
 """
 Created on Saturday Apr 13 10:13:02 2019
@@ -96,7 +96,7 @@ def obtain_returns(n_day):
 		df_test=sym_dict[sym]
 		returns=n_day_returns(df_test[['symbol', 'date', 'adjusted']],n_day)
 	return(returns)
-#obtain_returns()
+obtain_returns(1)
 
 
 def get_params_time(t):
