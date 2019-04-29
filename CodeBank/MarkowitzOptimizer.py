@@ -31,6 +31,7 @@ def calc_max_pos(var,ER, max_pos):
                 bounds[i] = kOpt
             else:
                 bounds[i] = -max_pos
+    return bounds
 
 
 
