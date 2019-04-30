@@ -78,24 +78,26 @@ print("Backtest from Dec. 12, 2017 to Jan18, 2018 with uniform noise:")
 testMat1 = utl.markowitz_backtest(corr, 2000, 2025, max_position_size,
                                  risk_tolerance, min_dollar_exposure,
                                  max_dollar_exposure, noiseMu=0,
-                                 noiseSdFact=1, dist="Unif")
+                                 noiseSdFact=5, dist="Unif")
 print(testMat1)
-np.savetxt("../Data/Test/UnifNoise1.0/121217-011818Lin.csv", testMat1)
+print("Running test 2")
+np.savetxt("../Data/Test/UnifNoise5.0/121217-011818Lin.csv", testMat1)
 
 testMat2 = utl.markowitz_backtest(corr, 2000, 2025, max_position_size,
                                  risk_tolerance, min_dollar_exposure,
                                  max_dollar_exposure, noiseMu=0,
-                                 noiseSdFact=2, dist="Unif")
+                                 noiseSdFact=6.5, dist="Unif")
 print(testMat2)
-np.savetxt("../Data/Test/UnifNoise2.0/121217-011818Lin.csv", testMat2)
+print("Running test 3")
+np.savetxt("../Data/Test/UnifNoise6.5/121217-011818Lin.csv", testMat2)
 
 
 testMat3 = utl.markowitz_backtest(corr, 2000, 2025, max_position_size,
                                  risk_tolerance, min_dollar_exposure,
                                  max_dollar_exposure, noiseMu=0,
-                                 noiseSdFact=3, dist="Unif")
+                                 noiseSdFact=8, dist="Unif")
 print(testMat3)
-np.savetxt("../Data/Test/UnifNoise3.0/121217-011818Lin.csv", testMat3)
+np.savetxt("../Data/Test/UnifNoise8.0/121217-011818Lin.csv", testMat3)
 
 
 
