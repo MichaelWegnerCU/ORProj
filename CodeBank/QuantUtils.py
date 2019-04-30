@@ -17,16 +17,22 @@ Author: Zane Jakobs
 
 Param rets: numpy array of returns
 
-Param mu: mean of Gaussian noise to add
+Param mu: mean of Gaussian noise to add, or lower bound on uniform
 
-Param sd: standard deviation of Gaussian noise to add
+Param sd: standard deviation of Gaussian noise to add, or upper bound on uniform
+
+Param dist: normal ("Norm") or uniform ("Unif") distribution?
 
 ASSUMPTION NOTE: WE'RE ADDING GAUSSIAN NOISE, SO WE'LL BE DISTORTING
 THE RETURNS DISTRIBUTION BY MAKING IT MORE GAUSSIAN (SINCE THE NORMAL
 IS A STABLE DISTRIBUTION). 
 '''
-def noisify_returns(rets, mu, sd):
-    noise = np.random.normal(mu, sd, rets.shape)
+@jit
+def noisify_returns(rets, mu, sd, dist="Norm"):
+    if dist == "Norm":
+        noise = np.random.normal(mu, sd, rets.shape)
+    elif dist == "Unif":
+        noise = np.random.uniform(-1*sd,sd,rets.shape)
     noisyRets = rets + noise
     return noisyRets
 
@@ -42,6 +48,7 @@ def key_to_ticker(key):
     return key[(key.find("[") + 1):key.find("]")]
 
 #applies above to whole dict
+@jit
 def all_key_to_ticker(dct):
     newDct = {}
     for key in dct.keys():
@@ -61,6 +68,7 @@ as the expReturns parameter of markowitz_optimize(...)
 Return: numpy array of portfolio weights aligned with
 correct spot relative to returns vector and covariance matrix
 '''
+@jit
 def dict_to_weight(dct, ret):
     #ordered tickers
     tkr = ret.columns
@@ -219,6 +227,7 @@ def select_equities(returns, nlong = 200, nshort = 200, by="Return"):
         tradeableEquities = pd.concat([longs,shorts], axis=1)
         return tradeableEquities
     
+@jit
 def markowitz_one_day_test(ERets, realRets, covMat,  max_position_size,
                            risk_tolerance, min_dollar_exposure,
                            max_dollar_exposure):
@@ -245,8 +254,10 @@ Brief: run backtest for Markowitz optimizer over one covariance matrix
 
 Return: array of daily returns in order
 '''
+@jit
 def markowitz_backtest(corrMat, startId, endId, maxPos, riskTol, 
-                       minDol, maxDol, noiseMu=0.0, noiseSdFact=0.0):
+                       minDol, maxDol, noiseMu=0.0, noiseSdFact=0.0,
+                       dist="Norm"):
     testLen = endId - startId
     assert testLen > 0
     
@@ -260,7 +271,7 @@ def markowitz_backtest(corrMat, startId, endId, maxPos, riskTol,
         retsId = rets.iloc[startId + day,:]
         if noiseSdFact > 0:
             realSd = np.std(retsId)
-            noisyRet = noisify_returns(retsId, noiseMu, noiseSdFact*realSd)
+            noisyRet = noisify_returns(retsId, noiseMu, noiseSdFact*realSd, dist)
         else:
             noisyRet = retsId
         

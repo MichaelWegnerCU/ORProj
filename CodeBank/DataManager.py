@@ -2,6 +2,7 @@ import os
 import re
 import pandas as pd 
 import numpy as np 
+import QuantUtils as utl
 
 #from QuantUtils import n_day_returns
 
@@ -94,9 +95,9 @@ def obtain_returns(n_day):
 	sym_dict,uniq_sym=get_Ticker_prices()
 	for sym in uniq_sym:
 		df_test=sym_dict[sym]
-		returns=n_day_returns(df_test[['symbol', 'date', 'adjusted']],n_day)
-	return(returns)
-obtain_returns(1)
+		#returns= utl.n_day_returns(df_test[['symbol', 'date', 'adjusted']],n_day)
+	#return(returns)
+#obtain_returns(1)
 
 
 def get_params_time(t):

@@ -14,10 +14,10 @@ import MarkowitzOptimizer as mo
 import QuantUtils as utl
 from math import sqrt
 
-corr = pd.read_csv("/Users/zanejakobs/Desktop/FIN_ORProj/ORProj/Data/Spearman20002200.csv")
+corr = pd.read_csv("/Users/zanejakobs/Desktop/FIN_ORProj/ORProj/Data/Historical/Spearman10002200.csv")
 corr = corr.select_dtypes(include=np.number)
 
-timeId = 2113
+timeId = 1000
 sd, tkr = var.make_stdevs(timeId)
 cov = var.make_covariance(timeId, corr, printErr=False)
 
@@ -72,18 +72,30 @@ print("Realized Sharpe:")
 print(rret/rsd)
 
 
+#jan 18 2018 is 2025
+print("Backtest from Dec. 12, 2017 to Jan18, 2018 with uniform noise:")
 
-print("Backtest from Dec. 12, 2017 to Dec. 27, 2017:")
-
-testMat = utl.markowitz_backtest(corr, 2000, 2010, max_position_size,
+testMat1 = utl.markowitz_backtest(corr, 2000, 2025, max_position_size,
                                  risk_tolerance, min_dollar_exposure,
                                  max_dollar_exposure, noiseMu=0,
-                                 noiseSdFact=2)
-print(testMat)
-np.savetxt("../Data/Test/121217-127617.csv", testMat)
+                                 noiseSdFact=1, dist="Unif")
+print(testMat1)
+np.savetxt("../Data/Test/UnifNoise1.0/121217-011818Lin.csv", testMat1)
+
+testMat2 = utl.markowitz_backtest(corr, 2000, 2025, max_position_size,
+                                 risk_tolerance, min_dollar_exposure,
+                                 max_dollar_exposure, noiseMu=0,
+                                 noiseSdFact=2, dist="Unif")
+print(testMat2)
+np.savetxt("../Data/Test/UnifNoise2.0/121217-011818Lin.csv", testMat2)
 
 
-
+testMat3 = utl.markowitz_backtest(corr, 2000, 2025, max_position_size,
+                                 risk_tolerance, min_dollar_exposure,
+                                 max_dollar_exposure, noiseMu=0,
+                                 noiseSdFact=3, dist="Unif")
+print(testMat3)
+np.savetxt("../Data/Test/UnifNoise3.0/121217-011818Lin.csv", testMat3)
 
 
 
